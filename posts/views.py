@@ -6,6 +6,15 @@ from .models import Post
 from .serializers import PostSerializer
 from django.shortcuts import get_object_or_404
 
+
+@api_view(http_method_names=['GET'])
+def buscar_por_titulo(request:Request,title:str):
+    try:
+        objeto = Post.objects.get(title=title)
+        serializer = PostSerializer(objeto)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Post.DoesNotExist:
+        return Response({'detail':'objeto nao encontrado'})
 class PostListCreate(APIView):
     serializer_class = PostSerializer
     
